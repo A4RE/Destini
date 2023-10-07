@@ -13,10 +13,30 @@ class ViewController: UIViewController {
     @IBOutlet weak var storyLabel: UILabel!
     @IBOutlet weak var choice1Button: UIButton!
     @IBOutlet weak var choice2Button: UIButton!
-    // Comment
+    
+    var storyBrain = StoryBrain()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateUI()
 
+    }
+    
+    @IBAction func buttonPressed(_ sender: UIButton) {
+        storyBrain.nextStory(userChoice: sender.currentTitle!)
+        updateUI()
+    }
+    
+    
+    private func updateUI() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                guard let self = self else { return }
+                storyLabel.text = storyBrain.getStoryTitle()
+                choice1Button.setTitle(storyBrain.getChoice1(), for: .normal)
+                choice2Button.setTitle(storyBrain.getChoice2(), for: .normal)
+            }
+        }
     }
 
 
